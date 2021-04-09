@@ -18,6 +18,7 @@ jobs:
         username: ${{secrets.SSH_USERNAME}}
 
         script: |
+          rm -rf actual
           mkdir actual
           cd actual
           git clone https://github.com/Alex-942/ucsddev-site.git
