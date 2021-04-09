@@ -1,0 +1,25 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy website
+      uses: appleboy/ssh-action@v0.1.2
+      with: 
+        host: ${{secrets.SSH_HOST}}
+        key: ${{secrets.SSH_KEY}}
+        username: ${{secrets.SSH_USERNAME}}
+
+        script: |
+          mkdir actual
+          cd actual
+          git clone https://github.com/Alex-942/ucsddev-site.git
+          rsync -r ~/actual/ucsddev-site/* /var/www/ucsddev.site/public_html/
+          echo 'Deployment successful to digital ocean'
