@@ -22,9 +22,6 @@ jobs:
           mkdir actual
           cd actual
           git clone https://github.com/Alex-942/ucsddev-site.git
-          rm -rf /var/www/ucsddev.site/*
-          rm -rf /var/www/reporting.ucsddev.site/*
-          rm -rf /var/www/collector.ucsddev.site/*
           rsync -r ~/actual/ucsddev-site/dev/* /var/www/ucsddev.site/
           rsync -r ~/actual/ucsddev-site/reporting/* /var/www/reporting.ucsddev.site/
           rsync -r ~/actual/ucsddev-site/collector/* /var/www/collector.ucsddev.site/
