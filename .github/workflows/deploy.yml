@@ -23,6 +23,6 @@ jobs:
           cd actual
           git clone https://github.com/Alex-942/ucsddev-site.git
           rsync -r ~/actual/ucsddev-site/dev/* /var/www/ucsddev.site/
-          rsync -r ~/actual/ucsddev-site/reporting/* /var/www/reporting.ucsddev.site/
+          rsync -r ~/actual/ucsddev-site/reporting/public_html/* /var/www/reporting.ucsddev.site/public_html/
           rsync -r ~/actual/ucsddev-site/collector/* /var/www/collector.ucsddev.site/
           echo 'Deployment successful to digital ocean'
