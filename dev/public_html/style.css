@@ -11,7 +11,7 @@
 
 .HW2-container {
   background-color: #cecbcb;
-  display: inline;
+  
 }
 
 .analytics-app-container {
@@ -19,7 +19,8 @@
   
 }
 
-section { padding:10px; 
+section { 
+  padding:10px; 
   overflow:hidden; }
 section > section { float:left; }
 
