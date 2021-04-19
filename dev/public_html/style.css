@@ -11,6 +11,7 @@
 
 .HW2-container {
   background-color: #cecbcb;
+  display: inline-block;
 }
 
 .analytics-app-container {
