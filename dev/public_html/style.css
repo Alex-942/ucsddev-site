@@ -11,7 +11,7 @@
 
 .HW2-container {
   background-color: #cecbcb;
-  display: flexbox;
+  display: inline-flex;
   
 }
 
