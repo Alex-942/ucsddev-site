@@ -20,7 +20,6 @@
 }
 
 section { 
-  padding:10px; 
-  overflow:hidden; }
-section > section { float:left; }
+  margin: 15px auto }
+
 
