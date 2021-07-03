@@ -1,3 +1,0 @@
-hello welcome to the empty "robots.txt" file!
-We made the link public for ease of grading :)
-Goodbye :)
