@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+      <meta charset="utf-8">
+      <title>ucsddev.site</title>
+      <link rel="stylesheet" href="/public/stylesheets/click-data.css">
+      <link rel='icon' href='/public/img/UCSD.png' type='image/x-icon' />
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HQMPWDX73N');
+      </script>
+
+      <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+      <style>
+        .zc-ref {
+          display: none;
+        }
+
+        #scatterPlot{
+          height:100%;
+          width:50%;
+          padding-bottom: 5%;
+        }
+      </style>
+      <script src="https://cdn.zinggrid.com/zinggrid.min.js" defer></script>
+      <style>
+        zing-grid {
+          background: #eeeeee;
+          font-size: 1.0rem;
+          padding: 8px;
+          box-shadow: 0 0 9px rgba(0, 0, 0, .15);
+          width:75%;
+          margin-left: 2%;
+          
+        }
+
+        button {
+          text-align: center;
+          background: #07C;
+          color: #FFF;
+          cursor: pointer;
+          border-radius: 3px;
+          border-color: transparent;
+          font-size: 0.85rem;
+          padding: 5px 20px;
+          cursor: pointer;
+          margin: 15px 0 15px 15px;
+          position: relative;
+        }
+     
+        button:hover {
+          background: #1b6ead;
+        }
+    
+        zg-caption {
+          background-color: darkblue;
+          color: white;
+          font-weight: bold;
+          opacity: 1;
+          text-align: center;
+          transition: 0.3s opacity;
+          font-size: 2rem;
+        }
+    
+        zg-caption:hover {
+          opacity: 1;
+        }
+    
+        zg-head {
+          color: rgb(0, 68, 255);
+        }
+    
+        zg-cell {
+          color: blue;
+          transition: 1s background-color;
+        }
+    
+        zg-cell:hover {
+          background-color: orange;
+        }
+    
+        zg-body zg-row:nth-child(odd) {
+          background-color: lightblue;
+        }
+      </style>
+    </head>
+
+    <body>
+        <% if(session.admin){%>
+            <%- include('partials/adminnavbar') %>
+        <%}else{%>
+            <%- include('partials/navbar') %>
+        <%}%>
+
+      <h1>Where Are Users Clicking and Why Are They Clicking There?</h1>
+      <div class='click-container'>
+      <div id='scatterPlot'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+      <div class='caption'> 
+        <h2 style='text-align: center; text-decoration: underline;'>Intentional or Accidental Clicks?</h2>
+        <p>Knowing where your users are clicking, and specifically what buttons they are clicking can
+        tell you alot about the interactivity of your website. It can also shed some light on other metrics such as your 
+        overall load time performance across pages. At first glance many of the clicks can seem to be random, however there
+        may be an underlying purpose that is not apparent. If we take a look at the click map on the left we see most
+        of the user clicks are centered around links which is what is expected. However there are some clicks
+        in locations with no links or buttons near by and there are clicks which seem to be in similar
+        formations but slightly off from where they should be. First lets decode why there are clicks in unintuitive 
+        areas and why are some different mouse buttons. Most of the green (left mouse) clicks which are in the center of
+        of the page or no where near any links with no obvious formation, we can disregard. These are likely accidental
+        or of no significance. However, the red (right mouse) and yellow (back mouse) clicks which seem to be in random locations
+        likely do serve a purpose. For example, the red clicks centered around the middle of the page where there are no links
+        may be users attempting to access the dev tools and inspect your page. The yellow clicks likely tell us that the User
+        enetred your page scrolled around a bit and bounced (the back mouse button returns to the previouse page). Since the 
+        click data is from our main landing page it is likely the users previous page was a search engine or some other
+        location where they were able to access our site from. So if they click the back mouse button they head back to that
+        original location, so they exit our site. Lastly we have the blue clicks (middle mouse), which has little significance as
+        it used for scrolling. 
+      </p></div>
+      </div>
+      <hr>
+      <div class='g-container'>
+        <div class='caption2'> 
+          <h2 style='text-align: center; text-decoration: underline;'>Screen Dimensions Affecting Click Coordinates</h2>
+          <p> Now in order to understand why there are formations of clicks which seem to be slightly off from where
+            they should be or similar to as formation of clicks which is directly on links, we must take a look at the user
+            static data to the right. Users have different screen resolutions and window sizes which will affect the
+            coordinates of a given click. For example if we take a look at the click map above we see there is a linear formation
+            of clicks directly to the right of the 'PHP', 'Python' and 'Ruby' section which isnt actually on the links. There
+            is also a formation slightly to the left of the section. This is due to users having different resolutions and window sizes
+            so their coordinates are not the same. If we take a look at the Static data table we see there are users with 
+            screen dimension: 1440 * 900 and a window dimension: 1440*817 but we also have users with screen dimension: 2560 *1440 and window
+            dimension: 2339 * 1200. So it makes sense that there are patterns and similar formations which seem to be in the wrong area. 
+            The answer is they aren't. Different users just have different coordinates depending on their dimensions. Additionally, 
+            since all of our users are using devices with large resolutions, we are ensured that the data points we referred to as misclicks earlier,
+            are truly misclicks as the common usage of larger resolutions amongst users imply that the position of the webpage would be similar for each user.  
+          </p>
+
+          <h2 style='text-align: center; text-decoration: underline;'>Complications</h2>
+          <p>This analysis of User click data proved to be untrivial as we faced major complications when semantically visualizing the data. 
+            The first necessity of the visualization was that we needed a picture of ucsddev.site as the background image of the plot to provide perspective 
+            of where the click coordinates relate to the postion on the webiste, otherwise it would be difficult to decode the data. Complications
+            arose from this search for a viable background image because each user has a unique window resolution (as discussed above),
+            which meant that no picture would perfectly relate the data to the background image across all users and their devices. Thus our final 
+            chart plotted the click coordinate with a degree of error.
+          </p>
+
+          <p>After capturing a viable background image for our visualization, we then noticed that our graph axises were not in the correct positon with respect 
+            to the background image. In the click chart, the 0 coordinates for both axises begin much later than where the background image
+            begins (unfixable according to zingChart). This further distorts the data visualization as coordinates are shifted away from their intended placment with respect to the background image.
+            Thus, due to the nonuniformaity of user window dimensions and the slight displacement of the data points, we estimate that the 
+            average margin of error is that the data points are shifted up and to right by approximately 15 pixels in the lower half of the background image, 
+            and shifted down and to the right 15 pixels in the upper half of the background image.
+          </p>
+        </div>
+        <zing-grid id='staticZing' caption="Static User Data" sort search pager page-size="4" page-size-options="4,8,12"
+        layout="card" viewport-stop data='[]' pager filter search>
+        <button onClick="getGridData();">Get Data</button>
+      </zing-grid>
+  
+      </div>
+
+      <hr>
+      
+      <div class='theWhy-container'>
+        <div id='fileSizeChart'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+        <div class='theWhy-caption'>
+          <h2 style='text-align: center; text-decoration: underline;'>Analyzing Why Users are Clicking at These Spots</h2>
+          <p>To understand why the users are clicking in the areas displayed, let's foucs on only the users' left click data and ignoring the potential misclicks.
+            Initially, we thought that the websites that have the most clicks surronding their links would also have lower file sizes as we thought that potentially
+            larger file size would imply longer load times thus discouraging users from re-entering said site. Interestingly we find a significant portion of clicks
+            at the bottom of our page, which may seem counter-intuative as it can be unlikey that users will scroll down to the very bottom of the page in order to see the links.
+            But after inspecting that links that are generating such substaintial clicking, we find that these links direct the user to our visualization pages. We can safely say that these 
+            sites are generating this many clicks because they direct the users to our most interesting pages due to our data visualizations and user interactivity. Next we can see that another large 
+            number of clicks are around the links within the HW2 grid. This is intersting as these sites on average are incredibly small compared to our other pages 
+            and have some interactivity for the users. Thus we can perhaps say that once again our users are visiting these sites because of their interactivty. Lastly,
+            the remianing pages about the team members, php information, and outdated analytics do not have substaintial clicks as these pages are primarily informational 
+            and do not provide any user interactivity. Thus we cannot truly solidfy on dominant reason why more links are more popular than others. Perhaps 
+            rather than the amount of attraction for a page being soely based on load times, it is a combination of user interactibility and decreased load times.
+            An example of this are the hw2 pages have both interactibility and decreased load times and display some of the highest attraction amongst the other links. Thus
+            in the future if we wanted to gain more views, we should aim to have webpages that have low file sizes (and thus low load times) and have a user interactivity factor
+            as well.
+          </p>
+        </div>
+      </div>
+      
+
+      
+      <script>
+        var barConfig = {
+          type : "bar3d",
+          plot : {
+            'border-radius': "9px"
+          },
+          plotarea: {
+              'margin-left': "5%",
+              adjustLayout: true,
+              "margin-top" : "20%"
+          },
+          title: {
+              text: 'File Size per Page',
+              fontColor: "#ffffff",
+              //width: 400,
+              fontSize: 32,
+              'background-color': "#00008B"
+          },
+          legend: {
+            header: {
+              text: 'Site Name',
+              textAlign: 'center',
+            },
+            y: "12%",
+            x: "13%",
+            draggable: true
+          },
+          scaleY: {
+            values: "0:45:5",
+            label: {
+              text: 'Size (MB)',
+              fontSize: 28
+            },
+          },
+          scaleX: {
+            label: {
+              text: 'Webpages',
+              fontSize: 28
+            },
+            labels: [""]
+            //labels: [ "https://ucsddev.site/", "https://ucsddev.site/hw1/hello.php", "https://ucsddev.site/hw3/hellodataviz.htm", "https://ucsddev.site/hw3/database.html", "https://ucsddev.site/members/qiuyutong.html", "https://ucsddev.site/members/AndrewHernandez.html", "https://ucsddev.site/members/alejandromarquez.html" ]
+          },
+          series: [
+            {
+              text: "ucsddev.site/robots.txt",
+              values: [.0003],
+              'background-color': "#00FF00",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/hw1/hello.php",
+              values: [.581],
+              'background-color': "#0055FF",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/hw1/report.html",
+              values: [.367],
+              'background-color': "#FFbF00",
+              alpha: 1
+            },
+            {
+              text: "All hw2 webpages (avg.)",
+              values: [.001],
+              'background-color': "#5a6063",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/hw3/hellodataviz.html",
+              values: [1.5],
+              'background-color': "#00FFD8",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/hw3/database.html",
+              values: [42.1],
+              'background-color': "#FF00F0",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/members/qiuyutong.html",
+              values: [21.2],
+              'background-color': "#D88102",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/members/AndrewHernandez.html",
+              values: [.272],
+              'background-color': "#9400EE",
+              alpha: 1
+            },
+            {
+              text: "ucsddev.site/members/alejandromarquez.html",
+              values: [.345],
+              'background-color': "#FF3200",
+              alpha: 1
+            }
+          ]
+        };
+
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+        zingchart.THEME = "classic";
+
+        zingchart.render({
+          id: 'fileSizeChart',
+          data: barConfig,
+          height: "85%",
+          width: "50%"
+        });
+        
+        window.addEventListener('load', () => {
+          fetch('https://ucsddev.site/api/static', {
+            method: 'GET'
+          })
+            .then((resp) => resp.json())
+            .then(function (data) {
+              let entries = data.static;
+              zing = document.getElementById('staticZing');
+              zing.setAttribute('data', JSON.stringify(entries));
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          let breaks = [];
+          fetch('https://ucsddev.site/api/activity', {
+            method: 'GET'
+          })
+          .then((resp) => resp.json())
+          .then(function(data) {
+            let breaks=[];
+
+            let prevEntry = "This is not the data you are looking for";
+          
+            let viewedPages = new Map();
+          
+            let clickedData = [];
+            let clickedB0 = [];
+            let clickedB1 = [];
+            let clickedB2 = [];
+            let clickedB3 = [];
+            let clickedB4 = [];
+            let currentPage = '';
+          
+            var i = 0;
+            console.log(data.activity.length)
+            while (i < data.activity.length) {
+              let breakLength = data.activity[i].break_length;
+              if (breakLength > 0 && breakLength < 200000){
+              breaks.push(breakLength);}
+              
+              
+              if(data.activity[i].user_enter != prevEntry && data.activity[i].user_enter != '' && data.activity[i].user_enter != '0'){
+                currentPage = data.activity[i].page;
+                if(viewedPages.has(data.activity[i].page)){
+                  let newCount = viewedPages.get(data.activity[i].page) + 1;
+                  viewedPages.set((data.activity[i].page), newCount);
+                }
+                else{
+                  viewedPages.set((data.activity[i].page), 1);
+                }
+                prevEntry = data.activity[i].user_enter;
+              }
+            
+              if(data.activity[i].clicks != null && data.activity[i].clicks != '' && currentPage == 'https://ucsddev.site/'){
+                let stat = data.activity[i].clicks;
+                let xCoord = Number(stat.substring(stat.indexOf('(') + 1, stat.indexOf(',')));
+                let yCoord = Number(stat.substring(stat.indexOf(',') + 2, stat.indexOf(')')));
+                let button = Number(stat.substring(stat.indexOf(':') + 2, stat.indexOf(':') + 3));
+              
+                clickedData.push([button, xCoord, yCoord]);
+                console.log(currentPage);
+              
+                if(button == 0) clickedB0.push([xCoord, yCoord]);
+                if(button == 1) clickedB1.push([xCoord, yCoord]);
+                if(button == 2) clickedB2.push([xCoord, yCoord]);
+                if(button == 3) clickedB3.push([xCoord, yCoord]);
+                if(button == 4) clickedB4.push([xCoord, yCoord]);
+              }
+
+              i++;
+            }
+          
+
+            ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+            zingchart.THEME = "classic";
+          
+            var scatterConfig = {
+              type : "scatter",
+
+              plot : {
+                'border-radius': "9px"
+              },
+              plotarea: {
+                  'margin-left': "0%",
+                  adjustLayout: true,
+                  backgroundImage: "/public/img/ucsddevHomepageResized.png",
+                  backgroundScale: .36,
+                  backgroundFit: 'x',
+                  "margin-top" : "10%"
+              },
+              title: {
+                  text: 'User Click Analysis of ucsddev.site',
+                  fontSize: 24,
+                  'background-color': "#00008B"
+              },
+              legend: {
+                header: {
+                  text: 'Click Type',
+                  textAlign: 'center',
+                },
+                y: "5%",
+                x: "9%",
+                draggable: true
+              },
+            
+              scaleY: {
+                values: "0:1440:100",
+                mirrored: true,
+              },
+              scaleX: {
+                values: "0:2560:100"
+              },
+              series: [
+                {
+                  text: "Left Mouse",
+                  values: clickedB0
+                },
+                {
+                  text: "Middle Mouse",
+                  values: clickedB1
+                },
+                {
+                  text: "Right Mouse",
+                  values: clickedB2
+                },
+                {
+                  text: "Back Mouse",
+                  values: clickedB3
+                },
+                {
+                  text: "Forward Mouse",
+                  values: clickedB4
+                }
+              ]
+            };
+          
+            zingchart.render({
+              id: 'scatterPlot',
+              data: scatterConfig,
+            });
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+        })
+      </script>
+      
+    </body>
+</html>

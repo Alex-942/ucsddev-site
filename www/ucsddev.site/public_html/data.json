@@ -1,0 +1,24 @@
+{
+  "activity": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "title": "Hw 1",
+      "author": "aasd",
+      "id": 2
+    }
+  ],
+  "static": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "performance": {
+    "name": "typicode"
+  }
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>ucsddev.site</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel='icon' href='/img/UCSD.png' type='image/x-icon' />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+  <script src= '../collector.js'></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-HQMPWDX73N');
+  </script>
+  <script src="https://cdn.zinggrid.com/zinggrid.min.js" defer></script>
+  <style>
+    zing-grid {
+      background: #eeeeee;
+      font-size: 1.2rem;
+      padding: 10px;
+      box-shadow: 0 0 9px rgba(0, 0, 0, .15);
+      width:auto;
+    }
+
+    zg-caption {
+      background-color: rgb(32, 164, 251);
+      color: white;
+      font-weight: bold;
+      opacity: 0.6;
+      text-align: center;
+      transition: 0.3s opacity;
+      font-size: 2rem;
+    }
+
+    zg-caption:hover {
+      opacity: 1;
+    }
+
+    zg-head {
+      color: rgb(0, 68, 255);
+    }
+
+    zg-cell {
+      color: blue;
+      transition: 1s background-color;
+    }
+
+    zg-cell:hover {
+      background-color: orange;
+    }
+
+    zg-body zg-row:nth-child(odd) {
+      background-color: lightblue;
+    }
+  </style>
+</head>
+
+<body>
+
+  <body>
+    <!--Grid Component Placement[2]-->
+    <zing-grid id='staticZing' caption="Static Data" sort search pager page-size="10" page-size-options="2,3,6"
+      layout="row" viewport-stop data='[]' pager filter search>
+    </zing-grid>
+    <hr />
+    <zing-grid id='performanceZing' caption="Peformance Data" sort search pager page-size="10" page-size-options="2,3,6"
+      layout="row" viewport-stop data='[]' pager filter search>
+    </zing-grid>
+    <hr />
+    <zing-grid id='activityZing' caption="Activity Data" sort search pager page-size="10" page-size-options="2,3,6"
+      layout="row" viewport-stop data='[]' pager filter search>
+    </zing-grid>
+    <script>
+      // window:load event for Javascript to run after HTML
+      // because this Javascript is injected into the document head
+      window.addEventListener('load', () => {
+
+        // TODO
+        fetch('https://ucsddev.site/api/static', {
+          method: 'GET'
+        })
+          .then((resp) => resp.json())
+          .then(function (data) {
+            let entries = data.static;
+            zing = document.getElementById('staticZing');
+            zing.setAttribute('data', JSON.stringify(entries));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        fetch('https://ucsddev.site/api/performance', {
+          method: 'GET'
+        })
+          .then((resp) => resp.json())
+          .then(function (data) {
+            let entries = data.performance;
+            zing = document.getElementById('performanceZing');
+            zing.setAttribute('data', JSON.stringify(entries));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        fetch('https://ucsddev.site/api/activity', {
+          method: 'GET'
+        })
+          .then((resp) => resp.json())
+          .then(function (data) {
+            let entries = data.activity;
+            zing = document.getElementById('activityZing');
+            zing.setAttribute('data', JSON.stringify(entries));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+      })
+    </script>
+  </body>
+
+</html>

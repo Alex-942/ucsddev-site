@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+      <meta charset="utf-8">
+      <title>ucsddev.site</title>
+      <link rel="stylesheet" href="/public/stylesheets/index-nonadmin.css">
+      <link rel='icon' href='/public/img/UCSD.png' type='image/x-icon' />
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HQMPWDX73N');
+      </script>
+      <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: grey;
+    }
+
+    .zc-ref {
+      display: none;
+    }
+  </style>
+      <script src="https://cdn.zinggrid.com/zinggrid.min.js" defer></script>
+      <style>
+        zing-grid {
+          background: #eeeeee;
+          font-size: 1.0rem;
+          padding: 8px;
+          box-shadow: 0 0 9px rgba(0, 0, 0, .15);
+          
+          
+        }
+
+        button {
+          text-align: center;
+          background: #07C;
+          color: #FFF;
+          cursor: pointer;
+          border-radius: 3px;
+          border-color: transparent;
+          font-size: 0.85rem;
+          padding: 5px 20px;
+          cursor: pointer;
+          margin: 15px 0 15px 15px;
+          position: relative;
+        }
+     
+        button:hover {
+          background: #1b6ead;
+        }
+    
+        zg-caption {
+          background-color: darkblue;
+          color: white;
+          font-weight: bold;
+          opacity: 1;
+          text-align: center;
+          transition: 0.3s opacity;
+          font-size: 2rem;
+        }
+    
+        zg-caption:hover {
+          opacity: 1;
+        }
+    
+        zg-head {
+          color: rgb(0, 68, 255);
+        }
+    
+        zg-cell {
+          color: blue;
+          transition: 1s background-color;
+        }
+    
+        zg-cell:hover {
+          background-color: orange;
+        }
+    
+        zg-body zg-row:nth-child(odd) {
+          background-color: lightblue;
+        }
+      </style>
+    </head>
+
+    <body>
+        <%- include('partials/navbar') %>
+      
+       
+  
+   
+  <br>
+  <div class=chart-container>
+  <div id='myChart'></div>
+  <div id='loadtime'></div>
+  
+  </div>
+  
+  <div id='hbarChart'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+  <div id='scatterPlot'><a class="zc-ref" href="https://www.zingchart.com/">Charts by ZingChart</a></div>
+  <div id ="grid-container">
+    <zing-grid id='staticZing' caption="Static User Data" sort search pager page-size="4" page-size-options="4,8,12"
+      layout="card" viewport-stop data='[]' pager filter search>
+      <button onClick="getGridData();">Get Data</button>
+    </zing-grid>
+  
+   <!-- <hr />
+    
+    <zing-grid id='performanceZing' caption="Peformance Data" sort search pager page-size="8" page-size-options="2,3,6"
+      layout="card" viewport-stop data='[]' pager filter search>
+    </zing-grid>
+    <hr />
+    <zing-grid id='activityZing' caption="Activity Data" sort search pager page-size="5" page-size-options="2,3,6"
+      layout="row" viewport-stop data='[]' pager filter search>
+    </zing-grid> -->
+  </div> 
+  <script>
+    function getGridData() {
+      const zgRef = document.querySelector('zing-grid');
+      const gridData = zgRef.getData();
+      console.log('--- Getting Data From Grid: ---', gridData);
+      alert('Check console for exported data!');
+    }
+    function getPercentile(data, percentile) {
+      data.sort();
+      var index = (percentile/100) * data.length;
+      var result;
+      if (Math.floor(index) == index) {
+           result = (data[(index-1)] + data[index])/2;
+      }
+      else {
+          result = data[Math.floor(index)];
+      }
+      return result;
+  }
+    window.addEventListener('load', () => {
+       // TODO
+       fetch('https://ucsddev.site/api/static', {
+        method: 'GET'
+      })
+        .then((resp) => resp.json())
+        .then(function (data) {
+          let entries = data.static;
+          zing = document.getElementById('staticZing');
+          zing.setAttribute('data', JSON.stringify(entries));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+     /* fetch('https://ucsddev.site/api/performance', {
+        method: 'GET'
+      })
+        .then((resp) => resp.json())
+        .then(function (data) {
+          let entries = data.performance;
+          zing = document.getElementById('performanceZing');
+          zing.setAttribute('data', JSON.stringify(entries));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      fetch('https://ucsddev.site/api/activity', {
+        method: 'GET'
+      })
+        .then((resp) => resp.json())
+        .then(function (data) {
+          let entries = data.activity;
+          zing = document.getElementById('activityZing');
+          zing.setAttribute('data', JSON.stringify(entries));
+        })
+        .catch(function (error) {
+          console.log(error);
+        }); */
+        fetch('https://ucsddev.site/api/performance', {
+          method: 'GET'
+        })
+        .then((resp) => resp.json())
+        .then(function(data) {
+          let loadtimes=[];
+          
+          var i = 0;
+          while (i < data.performance.length) {
+    
+            let loadtime = data.performance[i].load_time;
+            
+            if(loadtime < 2000)
+              loadtimes.push(loadtime);
+    
+    
+            i++;
+          }
+    
+          iq1 = getPercentile(loadtimes, 75)
+          median = getPercentile(loadtimes, 50)
+          iq2= getPercentile(loadtimes, 25)
+          console.log(iq1,iq2, median)
+          loads_data = [Math.min.apply(Math,loadtimes), iq1, median, iq2, Math.max.apply(Math,loadtimes)]
+          ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+          zingchart.THEME = "classic";
+          var loadConfig = {
+    
+              "type": "hboxplot",
+              "plotarea": {
+                "margin": "100"
+              },
+              "scaleX": {
+                "guide": {
+                  "visible": false
+                },
+                "label": {
+                  "text": "ucsddev.site",
+                  fontSize: 18,
+                },
+                "values": ["1"]
+              },
+              title: {
+                text: 'ucsddev.site Load Time Performance',
+                width: 0,
+                fontSize: 28,
+                y: '8%',
+                fontColor: "#2c4a59",
+                'background-color': "transparent"
+              },
+              "scaleY": {
+                "label": {
+                  "text": "Typical Page Load Time Lengths (in milliseconds)",
+                  fontSize: 18,
+                }
+              },
+              tooltip: {
+                paddingBottom: 20
+              },
+               "options": {
+                "box": {
+                  "barWidth": 0.5,
+                  "tooltip": {
+                    "text": "<span style=\"font-style:italic;\">Experiment no. %scale-key-text</span><br><b style=\"font-size:15px;\">Observations:</b><br><br>Maximum: <b>%data-max</b><br>Upper Quartile: <b>%data-upper-quartile</b><br>Median: <b>%data-median</b><br>Lower Quartile: <b>%data-lower-quartile</b><br>Minimum: <b>%data-min</b>"
+                  }
+                },
+                "outlier": {
+                  "tooltip": {
+                    "text": "<span style=\"font-style:italic;\">Experiment no. %scale-key-text</span><br><b style=\"font-size:15px;\">Observation: %node-value</b>"
+                  },
+                  "marker": {
+                    "type": "circle"
+                  }
+                }
+              },
+              "series": [{
+                "dataBox": [
+                  loads_data
+                ] , "data-outlier" : [ [ 2000, 2104] ]
+                
+                
+    
+              }]
+          };
+    
+        
+     
+          zingchart.render({
+            id: 'loadtime',
+            data: loadConfig,
+            width: '100%'
+          });
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      let breaks = [];
+    fetch('https://ucsddev.site/api/activity', {
+      method: 'GET'
+    })
+    .then((resp) => resp.json())
+    .then(function(data) {
+      let breaks=[];
+      
+      let prevEntry = "This is not the data you are looking for";
+
+      let viewedPages = new Map();
+
+      let clickedData = [];
+      let clickedB0 = [];
+      let clickedB1 = [];
+      let clickedB2 = [];
+      let clickedB3 = [];
+      let clickedB4 = [];
+      let currentPage = '';
+
+      var i = 0;
+      console.log(data.activity.length)
+      while (i < data.activity.length) {
+        let breakLength = data.activity[i].break_length;
+        if (breakLength > 0 && breakLength < 200000){
+        breaks.push(breakLength);}
+        
+
+        if(data.activity[i].user_enter != prevEntry && data.activity[i].user_enter != '' && data.activity[i].user_enter != '0'){
+          currentPage = data.activity[i].page;
+          if(viewedPages.has(data.activity[i].page)){
+            let newCount = viewedPages.get(data.activity[i].page) + 1;
+            viewedPages.set((data.activity[i].page), newCount);
+          }
+          else{
+            viewedPages.set((data.activity[i].page), 1);
+          }
+          prevEntry = data.activity[i].user_enter;
+        }
+
+        if(data.activity[i].clicks != null && data.activity[i].clicks != '' && currentPage == 'https://ucsddev.site/'){
+          let stat = data.activity[i].clicks;
+          let xCoord = Number(stat.substring(stat.indexOf('(') + 1, stat.indexOf(',')));
+          let yCoord = Number(stat.substring(stat.indexOf(',') + 2, stat.indexOf(')')));
+          let button = Number(stat.substring(stat.indexOf(':') + 2, stat.indexOf(':') + 3));
+
+          clickedData.push([button, xCoord, yCoord]);
+          console.log(currentPage);
+
+          if(button == 0) clickedB0.push([xCoord, yCoord]);
+          if(button == 1) clickedB1.push([xCoord, yCoord]);
+          if(button == 2) clickedB2.push([xCoord, yCoord]);
+          if(button == 3) clickedB3.push([xCoord, yCoord]);
+          if(button == 4) clickedB4.push([xCoord, yCoord]);
+        }
+        
+        i++;
+      }
+
+      
+      breaks_data = [Math.min.apply(Math,breaks), getPercentile(breaks, 25), getPercentile(breaks, 50), getPercentile(breaks, 75), Math.max.apply(Math,breaks)]
+      ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+      zingchart.THEME = "classic";
+      var myConfig = {
+
+          "type": "hboxplot",
+          "plotarea": {
+            "margin": "100"
+          },
+          "scaleX": {
+            "guide": {
+              "visible": false
+            },
+            "label": {
+              "text": "ucsddev.site",
+              fontSize: 18
+            },
+            "values": ["1"]
+          },
+          "scaleY": {
+            "label": {
+              "text": "Typical Break Lengths (in milliseconds)\n A break is a period of inactivity on the page",
+              fontSize: 18,
+            }
+          },
+          title: {
+            text: 'ucsddev.site Break Length Analysis',
+            width: 0,
+            fontSize: 28,
+            y: '8%',
+            fontColor: "#2c4a59",
+            'background-color': "transparent"
+          },
+          tooltip: {
+            paddingBottom: 20
+          },
+           "options": {
+            "box": {
+              "barWidth": 0.5,
+              "tooltip": {
+                "text": "<span style=\"font-style:italic;\">Experiment no. %scale-key-text</span><br><b style=\"font-size:15px;\">Observations:</b><br><br>Maximum: <b>%data-max</b><br>Upper Quartile: <b>%data-upper-quartile</b><br>Median: <b>%data-median</b><br>Lower Quartile: <b>%data-lower-quartile</b><br>Minimum: <b>%data-min</b>"
+              }
+            },
+            "outlier": {
+              "tooltip": {
+                "text": "<span style=\"font-style:italic;\">Experiment no. %scale-key-text</span><br><b style=\"font-size:15px;\">Observation: %node-value</b>"
+              },
+              "marker": {
+                "type": "circle"
+              }
+            }
+          },
+          "series": [{
+            "dataBox": [
+              breaks_data
+            ]
+            ,"data-outlier" : [ [ 211100, 211600 ] ]
+
+          }]
+      };
+
+      var hbarConfig = {
+        type : "hbar",
+        plot : {
+          'border-radius': "9px"
+        },
+        plotarea: {
+            'margin-left': "5%",
+            adjustLayout: true,
+            "margin-top" : "15%"
+        },
+        title: {
+            text: 'Visits per Page',
+            //width: 400,
+            fontSize: 32,
+            'background-color': "#00008B"
+        },
+        legend: {
+          header: {
+            text: 'Site Name',
+            textAlign: 'center',
+          },
+          y: "35%",
+          draggable: true
+        },
+        scaleY: {
+          values: "0:200:25",
+          label: {
+            text: 'Number of Visits',
+            fontSize: 28
+          },
+        },
+        scaleX: {
+          label: {
+            text: 'Webpages',
+            fontSize: 28
+          },
+          labels: [""]
+          //labels: [ "https://ucsddev.site/", "https://ucsddev.site/hw1/hello.php", "https://ucsddev.site/hw3/hellodataviz.htm", "https://ucsddev.site/hw3/database.html", "https://ucsddev.site/members/qiuyutong.html", "https://ucsddev.site/members/AndrewHernandez.html", "https://ucsddev.site/members/alejandromarquez.html" ]
+        },
+        series: [
+          {
+            text: "ucsddev.site",
+            values: [viewedPages.get("https://ucsddev.site/")],
+            'background-color': "#FF3200",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/hw1/hello.php",
+            values: [viewedPages.get("https://ucsddev.site/hw1/hello.php")],
+            'background-color': "#0055FF",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/hw3/hellodataviz.html",
+            values: [viewedPages.get("https://ucsddev.site/hw3/hellodataviz.html")],
+            'background-color': "#00FFD8",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/hw3/database.html",
+            values: [viewedPages.get("https://ucsddev.site/hw3/database.html")],
+            'background-color': "#FF00F0",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/members/qiuyutong.html",
+            values: [viewedPages.get("https://ucsddev.site/members/qiuyutong.html")],
+            'background-color': "#D88102",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/members/AndrewHernandez.html",
+            values: [viewedPages.get("https://ucsddev.site/members/AndrewHernandez.html")],
+            'background-color': "#9400EE",
+            alpha: 1
+          },
+          {
+            text: "ucsddev.site/members/alejandromarquez.html",
+            values: [viewedPages.get("https://ucsddev.site/members/alejandromarquez.html")],
+            'background-color': "#0FFF00",
+            alpha: 1
+          }
+        ]
+      };
+
+      var scatterConfig = {
+        type : "scatter",
+        
+        plot : {
+          'border-radius': "9px"
+        },
+        plotarea: {
+            'margin-left': "0%",
+            adjustLayout: true,
+            backgroundImage: "/public/img/ucsddevHomepageResized.png",
+            backgroundScale: .575,
+            backgroundFit: 'x',
+            "margin-top" : "10%"
+        },
+        title: {
+            text: 'User Click Analysis of ucsddev.site',
+            fontSize: 32,
+            'background-color': "#00008B"
+        },
+        legend: {
+          header: {
+            text: 'Click Type',
+            textAlign: 'center',
+          },
+          y: "5%",
+          x: "9%",
+          draggable: true
+        },
+   
+        scaleY: {
+          values: "0:1440:100",
+          mirrored: true,
+        },
+        scaleX: {
+          values: "0:2560:100"
+        },
+        series: [
+          {
+            text: "Left Mouse",
+            values: clickedB0
+          },
+          {
+            text: "Middle Mouse",
+            values: clickedB1
+          },
+          {
+            text: "Right Mouse",
+            values: clickedB2
+          },
+          {
+            text: "Back Mouse",
+            values: clickedB3
+          },
+          {
+            text: "Forward Mouse",
+            values: clickedB4
+          }
+        ]
+      };
+ 
+      zingchart.render({
+        id: 'myChart',
+        data: myConfig,
+        width: '150%',
+        width: '100%'
+      });
+
+      zingchart.render({
+        id: 'hbarChart',
+        data: hbarConfig,
+        width: '100%'
+      });
+
+      zingchart.render({
+        id: 'scatterPlot',
+        data: scatterConfig,
+        width: '100%',
+        height: '100%'
+      });
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+    
+  
+  })
+  </script>
+    </body>
+</html>

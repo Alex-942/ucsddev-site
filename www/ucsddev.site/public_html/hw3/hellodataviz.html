@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    
+    <meta charset="utf-8">
+    <title>ucsddev.site</title>
+    <!--link rel="stylesheet" href="style.css"-->
+    <link rel='icon' href='../img/UCSD.png' type='image/x-icon'/>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+    <script src= '../collector.js'></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-HQMPWDX73N');
+    </script>
+    <style>
+        html,
+        body,
+        #myChart {
+          height: 100%;
+          width: 100%;
+        }
+        #space{
+          padding-bottom: 75px;
+        }
+      </style>
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+  </head>
+    <body>
+        
+        <div id="barChart"></div>
+        <div id="space"></div>
+        <div id="pieChart"></div>
+        <div id="space"></div>
+        <div id="myChart"></div>
+        <div id="space"></div>
+        <script>
+            
+            window.addEventListener('load', function(event){
+                var staticData;
+                var length = 0;
+                var cookiesOn = 0;
+                var cookiesOff = 0;
+                var jsOn = 0;
+                var jsOff = 0;
+                var imgOn = 0;
+                var imgOff = 0;
+                var cssOn = 0;
+                var cssOff = 0;
+
+                var english = 0;
+                var chinese = 0;
+                var arabic = 0;
+                var french = 0;
+                var spanish = 0;
+                var japanesse = 0;
+                var korean = 0;
+                var other = 0;
+                
+                fetch('https://ucsddev.site/api/static', {
+                    method: 'GET'
+                })
+                .then((resp) => resp.json())
+                .then(function(data) {
+                    staticData = data.static;
+                    length = data.static.length;
+                    
+                    for(var i = 0; i < length; i++){
+                        if(staticData[i].accept_cookies == 'true') cookiesOn++;
+                        if(staticData[i].allow_js == 'true') jsOn++;
+                        if(staticData[i].allow_img == 'true') imgOn++;
+                        if(staticData[i].allow_css == 'true') cssOn++;
+                        if((staticData[i].user_lang).substring(0,2) == 'en') english++;
+                        if((staticData[i].user_lang).substring(0,2) == 'zh') chinese++;
+                        if((staticData[i].user_lang).substring(0,2) == 'ar') arabic++;
+                        if((staticData[i].user_lang).substring(0,2) == 'fr') french++;
+                        if((staticData[i].user_lang).substring(0,2) == 'es') spanish++;
+                        if((staticData[i].user_lang).substring(0,2) == 'ja') japanesse++;
+                        if((staticData[i].user_lang).substring(0,2) == 'ko') korean++;
+                    }
+
+                    cookiesOff = length - cookiesOn;
+                    jsOff = length - jsOn;
+                    imgOff = length - imgOn;
+                    cssOff = length - cssOn;
+                    other = length - english - chinese - arabic - french - spanish - japanesse - korean;
+                    zingchart.render({
+                    id: 'barChart',
+                        data: {
+                            type: 'bar3d',
+                            plotarea: {
+                                'margin-left': "5%",
+                                adjustLayout: false
+                            },
+                            title: {
+                                text: 'User Preferences',
+                                fontSize: 32,
+                            },
+                            legend: {
+                                draggable: true,
+                            },
+                            scaleX: {
+                                label: {
+                                    text: 'Type of Preferences',
+                                    fontSize: 20
+                                },
+                                labels: ["Cookies", "Javascript", "Images", "CSS"]
+                            },
+                            scaleY: {
+                                values: "0:15:1",
+                                label: {
+                                    text: '# of Users',
+                                    fontSize: 20
+                                }
+                            },
+                            series: [
+                            {
+                                text: "Prefernce Enabled",
+                                values: [cookiesOn, jsOn, imgOn, cssOn]
+                            },
+                            {
+                                text: "Prefernce Disabled",
+                                values: [cookiesOff, jsOff, imgOff, cssOff]
+                            },
+                            ]
+                        },
+                        
+                    });
+
+                    zingchart.render({
+                    id: 'pieChart',
+                        data: {
+                            type: 'navpie',
+                            options:{
+                                threshold: "10%",
+                            },
+                            legend: {
+                                header:{
+                                    text: "Language" 
+                                },
+                                draggable: true,
+                                "toggle-action":"remove"
+                            },
+                            plotarea: {
+                                'margin-left': "5%",
+                                adjustLayout: false
+                            },
+                            plot: {
+                                animation: {
+                                    "on-legend-toggle": true,
+                                    effect: 5,
+                                    method: 1,
+                                    sequence: 1,
+                                    speed: 1
+                                }
+                            },
+                            title: {
+                                text: 'User Languages',
+                                fontSize: 32,
+                            },
+                            series: [
+                            {
+                                text: "English",
+                                values: [english]
+                            },
+                            {
+                                text: "Spanish",
+                                values: [spanish]
+                            },
+                            {
+                                text: "Chinese",
+                                values: [chinese ]
+                            },
+                            {
+                                text: "Japanesse",
+                                values: [japanesse ]
+                            },
+                            {
+                                text: "Korean",
+                                values: [korean ]
+                            },
+                            {
+                                text: "French",
+                                values: [french]
+                            },
+                            {
+                                text: "Arabic",
+                                values: [arabic ]
+                            },
+                            {
+                                text: "Other",
+                                values: [other]
+                            }
+                            //{
+                            //    //values: [1, imgOff]
+                            //},
+                            //{
+                            //    //values: [cssOn, 1]
+                            //}
+                            ]
+                        }
+                    });
+                    //zing.setAttribute('data', JSON.stringify(entries));
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+            })
+          </script>
+
+          
+  <script>
+    window.addEventListener('load', () => {
+      let myData = [];
+      let value2 = [];
+      let value3 = [];
+      let labels = [];
+      fetch('https://ucsddev.site/api/performance', {
+          method: 'GET'
+        })
+        .then((resp) => resp.json())
+        .then(function(data) {
+          
+          var i = 0;
+          while (data.performance[i]) {
+            let startLoadTime = data.performance[i].load_start;
+            value2.push(startLoadTime);
+            let endLoadTime = data.performance[i].load_end;
+            value3.push(endLoadTime);
+            let totalLoadTime = parseFloat(String(data.performance[i].load_time));
+            myData.push(totalLoadTime);
+            let timestamp = data.performance[i].timestamp
+            labels.push(timestamp)
+            i++;
+          }
+          ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+          var theme = {
+            palette: {
+              line3d: [
+                  [ '#FBFCFE', '#9B26AF', '#9B26AF', '#8b229d' ], /* light purple */
+                  [ '#FBFCFE', '#E80C60', '#E80C60', '#d00a56' ], /* light pink */
+                  [ '#FBFCFE', '#E2D51A', '#E2D51A', '#E2D51A' ] /* med yellown */
+              ]
+            },
+            graph: {
+              title: {
+                fontFamily: 'Lato',
+                fontSize: 25,
+                padding: 15,
+                fontColor: '#1E5D9E',
+                adjustLayout: true
+              }
+            }
+          };
+      var myConfig = {
+        graphset: [
+        {
+          type: "line3d",
+          plot: {
+            animation: {
+                effect: "ANIMATION_SLIDE_LEFT",
+                delay: "2000"
+            },
+        },
+          plotarea: {
+            'adjust-layout': true
+          },
+          'scale-y': {
+            label: {
+              text: 'Time in Milliseconds',
+              fontSize: 14
+            },
+            progression: "log", /* Logarithmic Scale */
+            'log-base':  Math.E, /* or 10 */
+            decimals: 6
+          },
+          "title": {
+            "text": "Page Load End Time",
+            "font-size": "24px",
+            "adjust-layout": true
+          },
+          width: "100%",
+          height: "33.33%",
+          y: "0%",
+          x: "0%",
+          "scale-x": {
+            label: {
+              text: 'Timestamp of Entry',
+              fontSize: 14
+            },
+            "labels": labels
+          },
+          series: [
+            { values: value3}
+          ]
+        },
+        {
+          type: "line3d",
+          plot: {
+            animation: {
+                effect: "ANIMATION_SLIDE_LEFT",
+                delay: "2000"
+            },
+        },
+          plotarea: {
+            'adjust-layout': true
+          },
+          'scale-y': {
+            label: {
+              text: 'Time in Milliseconds',
+              fontSize: 14
+            },
+            progression: "log", /* Logarithmic Scale */
+            'log-base':  Math.E, /* or 10 */
+            decimals: 6
+          },
+          "title": {
+            "text": "Page Load Start Time",
+            "font-size": "24px",
+            "adjust-layout": true
+          },
+          width: "100%",
+          height: "33.33%",
+          y: "33.33%",
+          x: "0%",
+          "scale-x": {
+            label: {
+              text: 'Timestamp of Entry',
+              fontSize: 14
+            },
+            "labels": labels
+          },
+          series: [
+            { values: value2}
+          ]
+        },
+        {
+          type: "line3d",
+          plot: {
+            animation: {
+                effect: "ANIMATION_SLIDE_LEFT",
+                delay: "2000"
+            },
+        },
+          plotarea: {
+            'adjust-layout': true
+          },
+          'scale-y': {
+            label: {
+              text: 'Time in Milliseconds',
+              fontSize: 14
+            },
+            progression: "log", /* Logarithmic Scale */
+            'log-base':  Math.E, /* or 10 */
+            decimals: 3
+          },
+          "title": {
+            "text": "Total Load Time",
+            "font-size": "24px",
+            "adjust-layout": true
+          },
+          width: "100%",
+          height: "33.33%",
+          y: "66.66%",
+          x: "0%",
+          "scale-x": {
+            label: {
+              text: 'Timestamp of Entry',
+              fontSize: 14
+            },
+            "labels": labels
+          },
+          series: [
+            { values: myData}
+          ]
+        }
+      ]
+      };
+      console.log(myConfig)
+      zingchart.render({
+        id: 'myChart',
+        data: myConfig,
+        height: "100%",
+        width: "100%",
+        defaults:theme
+      });
+
+
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      
+    })
+  </script>
+    </body>
+       
+</html>

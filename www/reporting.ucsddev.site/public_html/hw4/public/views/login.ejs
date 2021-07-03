@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>ucsddev.site</title>
+  <!--<link rel="stylesheet" href="public_html/hw4/public/stylesheets/login.css">-->
+  <link rel="stylesheet" href="/public/stylesheets/login.css">
+  <link rel='icon' href='/public/img/UCSD.png' type='image/x-icon' />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-HQMPWDX73N');
+  </script>
+</head>
+
+<body>
+
+
+  <div class="SignUpModal" id="SignUpModal">
+
+    <div class="modal-header">
+      <div id="popup-close-button"><a href="#"></a></div>
+      <ul>
+        <li><a href="#" id="sign-in">Sign In</a></li>
+        <li><a href="#" id="Sign-Up">Sign Up</a></li>
+      </ul>
+    </div>
+    <div class="modal-form">
+      <form method="POST" action="/login" class="sign" id='sign'>
+
+        <input placeholder="Email or Username" type="text" name='email' id="email">
+
+        <input placeholder="Password" name='password' type="password" id="password">
+        <input type="submit" id="submit" value="Submit">
+      </form>
+
+      <form method="POST" action="/sign_up" class="SignUp" name='SignUp' id='SignUp'>
+        <!--I think it should be username right? not their actual names-->
+       <!-- <input placeholder="Username" type="text" name="usernamesignUp" id="usernamesignUp">
+        <input placeholder="Email" type="text" name="emailSignup" id="emailSignup">
+
+        <input placeholder="Password" type="password" name="passwordSignUp" id="passwordSignUp">
+
+        <input placeholder="Confirm Password" type="password" name="passwordconfirmation" id="passwordconfirmation">
+        <input type="submit" id="submit" value="Create Account"> -->
+        <h1>SIGN UP DISABLED</h1>
+      </form>
+    </div>
+    <!--.popup-content-->
+
+  </div>
+</body>
+<!--<script  src="public_html/hw4/public/javascripts/sign_in.js"></script>-->
+<script src="/public/javascripts/sign_in.js"></script>
+</html>

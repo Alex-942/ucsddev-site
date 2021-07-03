@@ -1,0 +1,75 @@
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: grey;
+}
+
+header{
+    background-color: white;
+}
+
+h1 {
+    color:white;
+    font-family: sans-serif;
+    text-align: center; 
+    text-decoration: underline;
+}
+.caption{
+    width: 45%;
+    background-color: darkblue;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    margin-left: 2%;
+    margin-right: 2%;
+    color: white;
+    font-size: larger;
+    padding-left: 25px;
+    padding-right: 25px;
+    height:fit-content
+    
+    
+}
+.click-container{
+    display: flex;
+}
+.g-container{
+    display: flex;
+}
+
+.theWhy-container{
+    display: flex;
+}
+
+.caption2{
+    margin-top: 2%;
+    width: 48%;
+    background-color: darkblue;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    margin-left: 2%;
+    color: white;
+    font-size: larger;
+    padding-left: 25px;
+    padding-right: 25px;
+    height:fit-content
+}
+
+.theWhy-caption{
+    margin-top: 2%;
+    width: 48%;
+    background-color: darkblue;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 10px;
+    margin-left: 2%;
+    color: white;
+    font-size: larger;
+    padding-left: 25px;
+    padding-right: 25px;
+    height:fit-content;
+}
+
+#fileSizeChart{
+    padding-top: 7%;
+}

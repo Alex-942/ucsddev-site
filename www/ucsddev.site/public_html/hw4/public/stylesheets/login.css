@@ -1,0 +1,175 @@
+body{background-color: grey;}
+.SignUpModal{
+    position: fixed;
+    left: 0;
+    top: 20%;
+    margin: 0;
+    width: 100%;
+    height:auto;
+    background-color:white;
+    border-radius: 10px;
+    z-index: 15;
+    opacity: 0;
+    visibility: visible;
+    transform: translateY(-20px);
+    transition: all .5s ease;
+    /*overflow: hidden;*/
+  }
+  
+  .SignUpModal.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(10px);
+    transition: all .5s ease;
+  }
+  
+  @media (min-width: 500px) {
+    .SignUpModal{
+      width: 500px;
+      left: 50%;
+      margin: 0 0 0 -250px;
+    }
+  }
+  
+  .modal-header {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 62px;
+    width: 100%;
+  }
+  
+  
+  
+  .modal-header ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .modal-header ul li {
+    text-align: center;
+    list-style: none;
+    width: 50%;
+    float: left;
+  }
+  
+  .modal-header ul li a {
+    display: block;
+    padding: 20px 0;
+    margin: 0;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  #sign-in {
+    background-color: darkblue;
+    color: #fff;
+    border-radius: 5px 0 0 0;
+  }
+  
+  #sign-in.active {
+    color: darkblue;
+    background-color: transparent;
+  }
+  
+  #Sign-Up {
+    background-color: darkblue;
+    color: #fff;
+    border-radius: 0 5px 0 0;
+  }
+  
+  #Sign-Up.active {
+    color: darkblue;
+    background-color: transparent;
+  }
+  
+  .modal-form {
+    height: 450px;
+    overflow:-moz-hidden-unscrollable;
+  }
+  
+  form.sign {
+    position: relative; 
+    top: 40px;
+    left: 0;
+    font-size: 1em;
+    opacity: 1;
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    -o-transition: all .35s;
+    transition: all .35s;
+  }
+  
+  form.sign.move-left {
+    opacity: 0;
+    transform: translateX(-450px);
+  }
+  
+  form label {
+    font-size: 1.1em;
+    color: darkblue;
+    margin-left: 23px;
+  }
+  
+  form.sign input {
+    border-radius: 10px;
+    width: 90%;
+    height: 40px;
+    margin: 5px 5% 30px 5%;
+    padding: 10px;
+    font-size: 1em;
+    color: darkblue;
+    outline: none;
+    border: none;
+    background-color:rgba(0,0,0,0.065);
+  }
+
+  
+  
+  input#submit {
+    background-color: darkblue;
+    color: #fff;
+    height: 50px;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 25px;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+  }
+  
+  form.SignUp {
+    position: relative; 
+    top: -280px;
+    left: 0;
+    font-size: 1em;
+    opacity: 0;
+    transform: translateX(450px);
+    -webkit-transition: all .35s;
+    -moz-transition: all .35s;
+    -o-transition: all .35s;
+    transition: all .35s;
+  }
+  
+  form.SignUp.move-left {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  form.SignUp input {
+    border-radius: 10px;
+    width: 90%;
+    height: 30px;
+    margin: 15px 5% 10px 5%;
+    padding: 10px;
+    font-size: 1em;
+    color: darkblue;
+    outline: none;
+    border: none;
+    background-color:rgba(0,0,0,0.065);
+  }

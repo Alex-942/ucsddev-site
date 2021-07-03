@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+  <meta charset="utf-8">
+  <title>ucsddev.site</title>
+  <link rel="stylesheet" href="../stylesheets/login.css">
+  <link rel='icon' href='../../../img/UCSD.png' type='image/x-icon' />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQMPWDX73N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-HQMPWDX73N');
+  </script>
+</head>
+
+<body>
+  <div class="SignUpModal" id="SignUpModal">
+
+    <div class="modal-header">
+      <div id="popup-close-button"><a href="#"></a></div>
+      <ul>
+        <li><a href="#" id="sign-in">Sign In</a></li>
+        <li><a href="#" id="Sign-Up">Sign Up</a></li>
+      </ul>
+    </div>
+    <div class="modal-form">
+      <form method="POST" action="/login" class="sign" id='sign'>
+
+        <input placeholder="Email or Username" type="text" name='email' id="email">
+
+        <input placeholder="Password" name='password' type="password" id="password">
+        <input type="submit" id="submit" value="Submit">
+      </form>
+
+      <form method="POST" action="/sign_up" class="SignUp" name='SignUp' id='SignUp'>
+        <input placeholder="Full Name" type="text" name="name-signUp" id="name-signUp">
+        <input placeholder="Email" type="text" name="email-Signup" id="email-Signup">
+
+        <input placeholder="Password" type="password" name="password-SignUp" id="password-SignUp">
+
+        <input placeholder="Confirm Password" type="password" name="password-confirmation" id="password-confirmation">
+        <input type="submit" id="submit" value="Create Account">
+      </form>
+    </div>
+    <!--.popup-content-->
+
+  </div>
+</body>
+<script  src="../javascripts/sign_in.js"></script>
+</html>

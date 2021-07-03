@@ -1,0 +1,75 @@
+.keywords{
+    color:gold;
+}
+
+
+b {
+    color: rgb(255,0,0);
+    font-size: 2em;
+    position: relative;
+}
+
+p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 15px;
+    margin-left: 15px;
+    display: inline;
+    position: static;
+    font-family: 'Lora', serif;
+}
+
+h1 {
+    font-size: 4rem;
+    margin: 10px 10px 10px 10px;
+    text-decoration: underline;
+    display: block;
+    background-color: beige;
+    text-align: center;
+}
+
+a[href]{
+    color: #ee82ee;
+    font-size: 12pt;
+    display: inline-block;
+}
+
+a:hover{
+    color: greenyellow;
+    min-width: 100%;
+}
+
+a:active{
+    color:skyblue;
+}
+
+
+
+
+
+
+ul ~ li {
+    background-color: #ff0;
+    height: 100px;
+    width: 100px;
+
+}
+
+img.border{
+    border-color: black;
+    border-radius: 10cm;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+body{
+    padding: 20px 20px 20px 20px;
+}
+
+@media screen and (min-width: 800px){
+    body{
+        background-color: rgb(185, 184, 184);
+    }
+}

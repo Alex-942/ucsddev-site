@@ -1,0 +1,32 @@
+body{background-color: grey;}
+#logoutModal {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border-radius: 25px;
+    color: black;
+    background-color: #fff;
+}
+
+#loginBtn {
+    background-color: darkblue;
+    color: #fff;
+    height: 50px;
+    width: 25%;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+    margin-left: 35%;
+}
+
+p {
+    font-size: 2em;
+}
