@@ -1,0 +1,35 @@
+.team-introduction {
+    margin-left: 70%;
+    /* margin-bottom: 50%; */
+    background-color: #cecbcb;
+    display: block;
+}
+
+.HW1-container {
+  background-color: #cecbcb;
+}
+
+.HW2-container {
+  background-color: #cecbcb;
+  display: inline-flex;
+  width:100%;
+  margin-right: 0;
+  
+}
+
+.HW3-container {
+  background-color: #cecbcb;
+  display: inline-flex;
+  width:100%;
+  margin-right: 0;
+  
+}
+
+.analytics-app-container {
+  background-color: #cecbcb;
+  
+}
+
+
+
+
